@@ -1,0 +1,81 @@
+@startuml use_case
+skinparam actorStyle awesome
+left to right direction
+
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam defaultFontSize 12
+
+skinparam rectangle {
+    BackgroundColor #FAFCFF
+    BorderColor #2D68C4
+    RoundCorner 10
+}
+
+skinparam usecase {
+    BackgroundColor #FFFFFF
+    BorderColor #1A5FB4
+    ArrowColor #2A609E
+}
+
+skinparam actor {
+    BackgroundColor #FFFFFF
+    BorderColor #1C71D8
+}
+
+actor "Посетитель\n(Абитуриент / Гость)" as Visitor
+actor "Первокурсник" as Freshman
+
+actor "Контент-менеджер" as Manager
+actor "Разработчик" as Developer
+
+Visitor <|-- Freshman
+
+rectangle "Веб-приложение «Виртуальная экскурсия по МИИГАиК»" {
+
+    package "Просмотр панорам" {
+        usecase "UC-1: Вращать и осматривать сцену 360°" as UC1
+        usecase "UC-4: Просматривать информационные метки" as UC4
+        usecase "UC-2: Перемещаться между сценами по стрелкам" as UC2
+        usecase "UC-3: Подгружать тайлы мультиразрешения" as UC3
+        usecase "UC-8: Выбирать локацию из меню" as UC8
+    }
+
+    package "Ориентация и поиск" {
+        usecase "UC-5: Изучать интерактивный план этажа" as UC5
+        usecase "UC-6: Переключать этажи здания" as UC6
+        usecase "UC-7: Искать аудиторию или кафедру" as UC7
+    }
+
+    package "Контент и администрирование" {
+        usecase "UC-9: Редактировать структуру scenes.json" as UC9
+        usecase "UC-10: Нарезать тайлы панорам (generate.py)" as UC10
+    }
+
+    package "Сборка и аудит" {
+        usecase "UC-11: Публиковать сборку (GitHub Pages)" as UC11
+        usecase "UC-12: Контролировать метрики (Lighthouse)" as UC12
+    }
+}
+
+' Связи пользователя напрямую к базовым прецедентам
+Visitor --> UC1
+Visitor --> UC2
+Visitor --> UC8
+Visitor --> UC5
+
+Freshman --> UC7
+
+' Include и Extend (слева направо: база <.. расширение)
+UC1 <.. UC4 : <<extend>>
+UC2 ..> UC3 : <<include>>
+UC5 <.. UC6 : <<extend>>
+
+' Служебные связи
+Manager --> UC9
+Manager --> UC10
+
+Developer --> UC10
+Developer --> UC11
+Developer --> UC12
+
+@enduml
