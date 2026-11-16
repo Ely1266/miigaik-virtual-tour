@@ -1,0 +1,87 @@
+@startuml
+skinparam backgroundColor #0D1117
+skinparam defaultFontName Arial
+skinparam defaultFontColor #C9D1D9
+skinparam shadowing false
+skinparam roundCorner 8
+
+skinparam package {
+  BackgroundColor #161B22
+  BorderColor #30363D
+  FontColor #58A6FF
+  FontStyle bold
+}
+
+skinparam rectangle {
+  BackgroundColor #21262D
+  BorderColor #388BFD
+  FontColor #FFFFFF
+  FontStyle bold
+}
+
+skinparam arrow {
+  Color #58A6FF
+  FontColor #8B949E
+}
+
+title Граф переходов виртуальной экскурсии МИИГАиК (15 сцен)
+
+package "Территория кампуса (Улица)" as P_Street {
+  rectangle "1. КПП Казакова\n(ext_kpp_kazakova)" as S1 #1F2937
+  rectangle "2. Внутренний двор\n(ext_courtyard)" as S2 #1F2937
+}
+
+package "Главный корпус — 1 этаж" as P_Floor1 {
+  rectangle "3. Главный вход\n(gk_1_porch)" as S3 #1E3A8A
+  rectangle "4. Холл «Зеркала»\n(gk_1_hall_mirrors)" as S4 #1E3A8A
+  rectangle "5. Столовая\n(gk_1_canteen)" as S5 #1E3A8A
+  rectangle "6. Фойе конф-зала\n(gk_1_foyer_conf)" as S6 #1E3A8A
+  rectangle "7. Конференц-зал\n(gk_1_conf_hall)" as S7 #1E3A8A
+  rectangle "8. Студцентр / Приёмка\n(gk_1_stud_center)" as S8 #1E3A8A
+  rectangle "9. Парадная лестница\n(gk_1_stairs)" as S9 #1E3A8A
+}
+
+package "Главный корпус — 2 этаж" as P_Floor2 {
+  rectangle "10. Холл 2 этажа\n(gk_2_hall)" as S10 #14532D
+  rectangle "11. Деканат ФГиИБ\n(gk_2_dekanat_fgiib)" as S11 #14532D
+  rectangle "12. Переход в Старый корпус\n(gk_2_transition)" as S12 #14532D
+}
+
+package "Старый корпус (Покои Демидовых)" as P_Old {
+  rectangle "13. Розовый зал\n(old_2_pink_hall)" as S13 #701A75
+  rectangle "14. Белый зал библиотеки\n(old_2_white_hall)" as S14 #701A75
+  rectangle "15. Ауд. 54 (Картография)\n(old_2_cartography_54)" as S15 #701A75
+}
+
+' Связи между сценами
+S1 <--> S2 : Проход через ворота
+S2 <--> S3 : Дорожка ко входу
+S3 <--> S4 : Входные двери / СКУД
+
+S4 <--> S6 : Проход в Фойе
+S6 <--> S5 : Вход в столовую
+S6 <--> S7 : Двери конф-зала
+S4 <--> S8 : Проход в студцентр
+S4 <--> S9 : Лестничный марш
+
+S9 <--> S10 : Подъём на 2 этаж (последовательно)
+S10 <--> S11 : Коридор к деканату (последовательно)
+S11 <--> S12 : Коридор к переходу (последовательно)
+
+S12 <--> S13 : Вход в анфиладу
+S13 <--> S14 : Двери читального зала (развилка)
+S13 <--> S15 : Двери ауд. 54 (развилка)
+
+note right of S6
+  Фойе 1 этажа:
+  распределение в столовую
+  и конференц-зал
+end note
+
+note right of S13
+  Розовый зал (развилка):
+  вход в Белый читальный зал
+  или в ауд. 54 (Картография)
+end note
+
+@enduml

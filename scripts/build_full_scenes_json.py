@@ -1,0 +1,385 @@
+#!/usr/bin/env python3
+"""
+Скрипт для сборки полной конфигурации public/data/scenes.json со всеми 15 сценами,
+двусторонними переходами (хотспотами) и 11 информационными метками МИИГАиК.
+"""
+
+import json
+import os
+
+FLOORS = [
+    {"id": "floor_street", "name": "Территория кампуса", "level": 0, "planImage": "floorplans/campus.png"},
+    {"id": "floor_1", "name": "1 этаж (Главный корпус)", "level": 1, "planImage": "floorplans/floor_1.png"},
+    {"id": "floor_2", "name": "2 этаж (Главный корпус)", "level": 2, "planImage": "floorplans/floor_2.png"},
+    {"id": "floor_old", "name": "Старый корпус (Усадьба Демидовых)", "level": 2, "planImage": "floorplans/floor_old.png"}
+]
+
+SCENES_DEF = {
+    "ext_kpp_kazakova": {
+        "title": "КПП со стороны ул. Казакова",
+        "floorId": "floor_street",
+        "yaw": 0, "pitch": 0, "hfov": 100,
+        "floorPosition": {"x": 20.0, "y": 80.0},
+        "hotSpots": [
+            {
+                "pitch": -2, "yaw": 0, "type": "scene",
+                "text": "Пройти во Внутренний двор кампуса",
+                "sceneId": "ext_courtyard", "targetYaw": 0, "targetPitch": 0
+            },
+            {
+                "pitch": 5, "yaw": -45, "type": "info",
+                "text": "Исторические ворота усадьбы Демидовых",
+                "infoTitle": "КПП МИИГАиК и усадьба Демидовых",
+                "infoBody": "Главный пешеходный вход в университет со стороны улицы Казакова и Гороховского переулка. Территория МИИГАиК расположена на землях исторической усадьбы горнозаводчиков Демидовых, сформировавшейся в конце XVIII века. Парадные въездные ворота являются памятником архитектуры эпохи зрелого классицизма (источник: miigaik.ru/about/history)."
+            }
+        ]
+    },
+    "ext_courtyard": {
+        "title": "Внутренний двор кампуса",
+        "floorId": "floor_street",
+        "yaw": 0, "pitch": 0, "hfov": 100,
+        "floorPosition": {"x": 40.0, "y": 70.0},
+        "hotSpots": [
+            {
+                "pitch": -2, "yaw": 180, "type": "scene",
+                "text": "Вернуться к КПП (выход на ул. Казакова)",
+                "sceneId": "ext_kpp_kazakova", "targetYaw": 180, "targetPitch": 0
+            },
+            {
+                "pitch": -1, "yaw": 0, "type": "scene",
+                "text": "Подойти к Главному входу в корпус",
+                "sceneId": "gk_1_porch", "targetYaw": 0, "targetPitch": 0
+            },
+            {
+                "pitch": 10, "yaw": 30, "type": "info",
+                "text": "Главный учебно-лабораторный корпус",
+                "infoTitle": "Фасад Главного корпуса",
+                "infoBody": "Многоэтажный учебно-лабораторный корпус университета. В здании сосредоточены поточные лекционные залы, деканаты факультетов, студенческие столовые и специализированные геодезические лаборатории (источник: miigaik.ru)."
+            }
+        ]
+    },
+    "gk_1_porch": {
+        "title": "Главный вход в корпус",
+        "floorId": "floor_1",
+        "yaw": 0, "pitch": 0, "hfov": 100,
+        "floorPosition": {"x": 50.0, "y": 85.0},
+        "hotSpots": [
+            {
+                "pitch": -3, "yaw": 180, "type": "scene",
+                "text": "Выйти во Внутренний двор кампуса",
+                "sceneId": "ext_courtyard", "targetYaw": 180, "targetPitch": 0
+            },
+            {
+                "pitch": -1, "yaw": 0, "type": "scene",
+                "text": "Войти в Центральный холл («Зеркала»)",
+                "sceneId": "gk_1_hall_mirrors", "targetYaw": 0, "targetPitch": 0
+            },
+            {
+                "pitch": 0, "yaw": -30, "type": "info",
+                "text": "Пропускной режим кампуса",
+                "infoTitle": "Входная группа и СКУД",
+                "infoBody": "Центральная проходная оборудована турникетами с электронной системой контроля доступа. Доступ осуществляется по электронным студенческим пропускам и кампусным картам МИИГАиК (источник: miigaik.ru)."
+            }
+        ]
+    },
+    "gk_1_hall_mirrors": {
+        "title": "Центральный холл («Зеркала»)",
+        "floorId": "floor_1",
+        "yaw": 0, "pitch": 0, "hfov": 100,
+        "floorPosition": {"x": 50.0, "y": 60.0},
+        "hotSpots": [
+            {
+                "pitch": -3, "yaw": 180, "type": "scene",
+                "text": "Выход на крыльцо Главного корпуса",
+                "sceneId": "gk_1_porch", "targetYaw": 180, "targetPitch": 0
+            },
+            {
+                "pitch": -1, "yaw": 60, "type": "scene",
+                "text": "Пройти в Фойе (к столовой и конференц-залу)",
+                "sceneId": "gk_1_foyer_conf", "targetYaw": 0, "targetPitch": 0
+            },
+            {
+                "pitch": -2, "yaw": 110, "type": "scene",
+                "text": "Пройти в Студенческий центр (Приёмная комиссия)",
+                "sceneId": "gk_1_stud_center", "targetYaw": 90, "targetPitch": 0
+            },
+            {
+                "pitch": 4, "yaw": 0, "type": "scene",
+                "text": "Подняться по Парадной лестнице на 2 этаж",
+                "sceneId": "gk_1_stairs", "targetYaw": 0, "targetPitch": 0
+            },
+            {
+                "pitch": 5, "yaw": -25, "type": "info",
+                "text": "О холле «Зеркала»",
+                "infoTitle": "Холл «Зеркала» (1 этаж)",
+                "infoBody": "Легендарное место встреч студентов университета. Просторный вестибюль с зеркальной галереей служит главным распределительным центром первого этажа: отсюда можно быстро пройти к лекционным залам, столовой, актовому комплексу и переходам в старый корпус (источник: miigaik.ru)."
+            }
+        ]
+    },
+    "gk_1_canteen": {
+        "title": "Студенческая столовая",
+        "floorId": "floor_1",
+        "yaw": 0, "pitch": 0, "hfov": 100,
+        "floorPosition": {"x": 80.0, "y": 45.0},
+        "hotSpots": [
+            {
+                "pitch": -3, "yaw": 180, "type": "scene",
+                "text": "Выйти в Фойе конференц-зала",
+                "sceneId": "gk_1_foyer_conf", "targetYaw": -120, "targetPitch": 0
+            },
+            {
+                "pitch": 2, "yaw": 0, "type": "info",
+                "text": "Студенческое питание в МИИГАиК",
+                "infoTitle": "Комбинат питания МИИГАиК",
+                "infoBody": "Студенческая столовая обеспечивает обучающихся и преподавателей качественным горячим питанием по доступным ценам. Ежедневно предлагаются комплексные обеды, выпечка собственного производства и диетические блюда (источник: miigaik.ru/students/catering)."
+            }
+        ]
+    },
+    "gk_1_foyer_conf": {
+        "title": "Фойе перед Конференц-залом",
+        "floorId": "floor_1",
+        "yaw": 0, "pitch": 0, "hfov": 100,
+        "floorPosition": {"x": 70.0, "y": 60.0},
+        "hotSpots": [
+            {
+                "pitch": -2, "yaw": -120, "type": "scene",
+                "text": "Вернуться в Центральный холл («Зеркала»)",
+                "sceneId": "gk_1_hall_mirrors", "targetYaw": -120, "targetPitch": 0
+            },
+            {
+                "pitch": -1, "yaw": -30, "type": "scene",
+                "text": "Войти в Студенческую столовую",
+                "sceneId": "gk_1_canteen", "targetYaw": 0, "targetPitch": 0
+            },
+            {
+                "pitch": -1, "yaw": 30, "type": "scene",
+                "text": "Войти в Конференц-зал",
+                "sceneId": "gk_1_conf_hall", "targetYaw": 0, "targetPitch": 0
+            }
+        ]
+    },
+    "gk_1_conf_hall": {
+        "title": "Конференц-зал",
+        "floorId": "floor_1",
+        "yaw": 0, "pitch": 0, "hfov": 100,
+        "floorPosition": {"x": 85.0, "y": 60.0},
+        "hotSpots": [
+            {
+                "pitch": -2, "yaw": 180, "type": "scene",
+                "text": "Выйти в Фойе конференц-зала",
+                "sceneId": "gk_1_foyer_conf", "targetYaw": 180, "targetPitch": 0
+            },
+            {
+                "pitch": 6, "yaw": 0, "type": "info",
+                "text": "Главная конференц-площадка",
+                "infoTitle": "Конференц-зал университета",
+                "infoBody": "Пространство для проведения международных научных симпозиумов, заседаний Учёного совета МИИГАиК, открытых лекций ведущих учёных в области наук о Земле и торжественных мероприятий (источник: miigaik.ru/science/events)."
+            }
+        ]
+    },
+    "gk_1_stud_center": {
+        "title": "Студенческий центр (Приёмная комиссия)",
+        "floorId": "floor_1",
+        "yaw": 0, "pitch": 0, "hfov": 100,
+        "floorPosition": {"x": 70.0, "y": 80.0},
+        "hotSpots": [
+            {
+                "pitch": -2, "yaw": -70, "type": "scene",
+                "text": "Вернуться в Центральный холл («Зеркала»)",
+                "sceneId": "gk_1_hall_mirrors", "targetYaw": -70, "targetPitch": 0
+            },
+            {
+                "pitch": 4, "yaw": 20, "type": "info",
+                "text": "Студенческий офис и приём документов",
+                "infoTitle": "Студенческий центр и Приёмная комиссия",
+                "infoBody": "Сервисный центр работает по принципу «одного окна» для решения учебных вопросов, оформления справок и консультаций. В летний период здесь разворачивается центральный штаб Приёмной комиссии МИИГАиК (источник: miigaik.ru/admission)."
+            }
+        ]
+    },
+    "gk_1_stairs": {
+        "title": "Парадная лестница",
+        "floorId": "floor_1",
+        "yaw": 0, "pitch": 0, "hfov": 100,
+        "floorPosition": {"x": 50.0, "y": 45.0},
+        "hotSpots": [
+            {
+                "pitch": -10, "yaw": 180, "type": "scene",
+                "text": "Спуститься в Центральный холл 1 этажа",
+                "sceneId": "gk_1_hall_mirrors", "targetYaw": 180, "targetPitch": 0
+            },
+            {
+                "pitch": 8, "yaw": 0, "type": "scene",
+                "text": "Подняться в Холл 2 этажа",
+                "sceneId": "gk_2_hall", "targetYaw": 0, "targetPitch": 0
+            }
+        ]
+    },
+    "gk_2_hall": {
+        "title": "Холл 2 этажа",
+        "floorId": "floor_2",
+        "yaw": 0, "pitch": 0, "hfov": 100,
+        "floorPosition": {"x": 50.0, "y": 50.0},
+        "hotSpots": [
+            {
+                "pitch": -8, "yaw": 180, "type": "scene",
+                "text": "Спуститься по лестнице на 1 этаж",
+                "sceneId": "gk_1_stairs", "targetYaw": 180, "targetPitch": 0
+            },
+            {
+                "pitch": -1, "yaw": 0, "type": "scene",
+                "text": "Пройти по коридору к Деканату ФГиИБ",
+                "sceneId": "gk_2_dekanat_fgiib", "targetYaw": 0, "targetPitch": 0
+            }
+        ]
+    },
+    "gk_2_dekanat_fgiib": {
+        "title": "Деканат ФГиИБ",
+        "floorId": "floor_2",
+        "yaw": 0, "pitch": 0, "hfov": 100,
+        "floorPosition": {"x": 50.0, "y": 40.0},
+        "hotSpots": [
+            {
+                "pitch": -2, "yaw": 180, "type": "scene",
+                "text": "Вернуться в Холл 2 этажа (к лестнице)",
+                "sceneId": "gk_2_hall", "targetYaw": 180, "targetPitch": 0
+            },
+            {
+                "pitch": -1, "yaw": 0, "type": "scene",
+                "text": "Пройти по коридору к Переходу в Старый корпус",
+                "sceneId": "gk_2_transition", "targetYaw": 0, "targetPitch": 0
+            },
+            {
+                "pitch": 3, "yaw": -30, "type": "info",
+                "text": "Факультет геоинформатики и информационной безопасности",
+                "infoTitle": "Факультет ФГиИБ МИИГАиК",
+                "infoBody": "Один из ключевых IT-факультетов университета. Готовит специалистов по разработке ГИС-приложений, спутниковому позиционированию, веб-картографии и комплексной защите информации автоматизированных систем (источник: miigaik.ru/fgiib)."
+            }
+        ]
+    },
+    "gk_2_transition": {
+        "title": "Переход в Старый корпус",
+        "floorId": "floor_2",
+        "yaw": 0, "pitch": 0, "hfov": 100,
+        "floorPosition": {"x": 50.0, "y": 30.0},
+        "hotSpots": [
+            {
+                "pitch": -2, "yaw": 180, "type": "scene",
+                "text": "Вернуться к Деканату ФГиИБ (Главный корпус)",
+                "sceneId": "gk_2_dekanat_fgiib", "targetYaw": 180, "targetPitch": 0
+            },
+            {
+                "pitch": -1, "yaw": 0, "type": "scene",
+                "text": "Войти в Розовый зал (усадьба Демидовых)",
+                "sceneId": "old_2_pink_hall", "targetYaw": 0, "targetPitch": 0
+            }
+        ]
+    },
+    "old_2_pink_hall": {
+        "title": "Розовый зал (Покои Демидовых)",
+        "floorId": "floor_old",
+        "yaw": 0, "pitch": 0, "hfov": 100,
+        "floorPosition": {"x": 50.0, "y": 40.0},
+        "hotSpots": [
+            {
+                "pitch": -2, "yaw": 180, "type": "scene",
+                "text": "Переход в Главный корпус",
+                "sceneId": "gk_2_transition", "targetYaw": 180, "targetPitch": 0
+            },
+            {
+                "pitch": -1, "yaw": -60, "type": "scene",
+                "text": "Пройти в Белый читальный зал библиотеки",
+                "sceneId": "old_2_white_hall", "targetYaw": -60, "targetPitch": 0
+            },
+            {
+                "pitch": -1, "yaw": 60, "type": "scene",
+                "text": "Пройти в Аудиторию 54 (Кабинет картографии)",
+                "sceneId": "old_2_cartography_54", "targetYaw": 60, "targetPitch": 0
+            },
+            {
+                "pitch": 5, "yaw": 0, "type": "info",
+                "text": "Шедевр классицизма Матвея Казакова",
+                "infoTitle": "Золотые комнаты Демидовых (Розовый зал)",
+                "infoBody": "Парадный зал усадебного дворца, созданный в 1789–1791 гг. великим русским архитектором Матвеем Казаковым. Зал украшен колоннами искусственного мрамора, позолоченной лепниной и уникальными историческими люстрами. Здесь проходят торжественные заседания и вручение дипломов с отличием (источник: miigaik.ru/museum/demidov)."
+            }
+        ]
+    },
+    "old_2_white_hall": {
+        "title": "Белый читальный зал библиотеки",
+        "floorId": "floor_old",
+        "yaw": 0, "pitch": 0, "hfov": 100,
+        "floorPosition": {"x": 35.0, "y": 25.0},
+        "hotSpots": [
+            {
+                "pitch": -2, "yaw": 120, "type": "scene",
+                "text": "Вернуться в Розовый зал",
+                "sceneId": "old_2_pink_hall", "targetYaw": 120, "targetPitch": 0
+            },
+            {
+                "pitch": 4, "yaw": 0, "type": "info",
+                "text": "Научно-техническая библиотека МИИГАиК",
+                "infoTitle": "Белый читальный зал библиотеки",
+                "infoBody": "Университетская библиотека ведёт свою летопись с 1779 года. Фонд насчитывает сотни тысяч томов редчайших изданий по астрономии, геодезии, оптике и географии, включая старинные рукописные карты и атласы Российской империи (источник: miigaik.ru/library)."
+            }
+        ]
+    },
+    "old_2_cartography_54": {
+        "title": "Аудитория 54 (Кабинет картографии)",
+        "floorId": "floor_old",
+        "yaw": 0, "pitch": 0, "hfov": 100,
+        "floorPosition": {"x": 65.0, "y": 25.0},
+        "hotSpots": [
+            {
+                "pitch": -2, "yaw": -120, "type": "scene",
+                "text": "Вернуться в Розовый зал",
+                "sceneId": "old_2_pink_hall", "targetYaw": -120, "targetPitch": 0
+            },
+            {
+                "pitch": 4, "yaw": 0, "type": "info",
+                "text": "Профильная учебная аудитория",
+                "infoTitle": "Кабинет картографического дизайна (Ауд. 54)",
+                "infoBody": "Учебная аудитория факультета картографии и геоинформатики. Пространство оборудовано для практических работ по проектированию карт, дешифрированию космических снимков и картографическому черчению (источник: miigaik.ru/cartography)."
+            }
+        ]
+    }
+}
+
+def main():
+    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    scenes_path = os.path.join(repo_root, "public", "data", "scenes.json")
+
+    scenes_data = {}
+    for sid, s in SCENES_DEF.items():
+        scenes_data[sid] = {
+            "title": s["title"],
+            "floorId": s["floorId"],
+            "yaw": s.get("yaw", 0),
+            "pitch": s.get("pitch", 0),
+            "hfov": s.get("hfov", 100),
+            "type": "multires",
+            "panorama": f"panoramas/{sid}.jpg",
+            "multiRes": {
+                "basePath": f"panoramas/{sid}",
+                "path": "/%l/%s%y_%x",
+                "fallbackPath": "/fallback/%s",
+                "extension": "jpg",
+                "tileResolution": 512,
+                "maxLevel": 2,
+                "cubeResolution": 1024
+            },
+            "floorPosition": s["floorPosition"],
+            "hotSpots": s["hotSpots"]
+        }
+
+    full_config = {
+        "defaultScene": "ext_kpp_kazakova",
+        "floors": FLOORS,
+        "scenes": scenes_data
+    }
+
+    with open(scenes_path, "w", encoding="utf-8") as f:
+        json.dump(full_config, f, indent=2, ensure_ascii=False)
+
+    print(f"Файл {scenes_path} успешно сформирован: 15 сцен, 4 этажа, мультиразрешение.")
+
+if __name__ == "__main__":
+    main()

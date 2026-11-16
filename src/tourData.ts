@@ -67,6 +67,7 @@ export function buildPannellumTourConfig(
       title: scene.title,
       type: scene.type,
       panorama: scene.panorama,
+      multiRes: scene.multiRes,
       pitch: scene.pitch ?? 0,
       yaw: scene.yaw ?? 0,
       hfov: scene.hfov ?? 100,

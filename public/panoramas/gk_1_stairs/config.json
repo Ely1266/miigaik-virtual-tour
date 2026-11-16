@@ -1,0 +1,13 @@
+{
+  "title": "Парадная лестница",
+  "type": "multires",
+  "multiRes": {
+    "basePath": "panoramas/gk_1_stairs",
+    "path": "/%l/%s%y_%x",
+    "fallbackPath": "/fallback/%s",
+    "extension": "jpg",
+    "tileResolution": 512,
+    "maxLevel": 2,
+    "cubeResolution": 1024
+  }
+}

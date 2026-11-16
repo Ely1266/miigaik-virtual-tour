@@ -1,0 +1,13 @@
+{
+  "title": "Розовый зал (Покои Демидовых)",
+  "type": "multires",
+  "multiRes": {
+    "basePath": "panoramas/old_2_pink_hall",
+    "path": "/%l/%s%y_%x",
+    "fallbackPath": "/fallback/%s",
+    "extension": "jpg",
+    "tileResolution": 512,
+    "maxLevel": 2,
+    "cubeResolution": 1024
+  }
+}

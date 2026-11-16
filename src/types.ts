@@ -28,6 +28,16 @@ export interface FloorPosition {
   y: number;
 }
 
+export interface MultiResConfig {
+  basePath: string;
+  path: string;
+  fallbackPath: string;
+  extension: string;
+  tileResolution: number;
+  maxLevel: number;
+  cubeResolution: number;
+}
+
 export interface SceneData {
   title: string;
   floorId: string;
@@ -36,6 +46,7 @@ export interface SceneData {
   hfov?: number;
   type: 'equirectangular' | 'cubemap' | 'multires';
   panorama?: string;
+  multiRes?: MultiResConfig;
   floorPosition?: FloorPosition;
   hotSpots?: HotSpotData[];
 }
@@ -65,6 +76,7 @@ export interface PannellumScene {
   yaw?: number;
   type: string;
   panorama?: string;
+  multiRes?: MultiResConfig;
   hotSpots?: PannellumHotSpot[];
 }
 
