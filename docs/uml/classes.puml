@@ -1,0 +1,82 @@
+@startuml classes
+skinparam classAttributeIconSize 0
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam defaultFontSize 12
+
+skinparam class {
+    BackgroundColor #FFFFFF
+    BorderColor #1A5FB4
+    ArrowColor #2A609E
+}
+
+class Tour {
+    - defaultSceneId: String
+    - currentSceneId: String
+    - scenes: Map<String, Scene>
+    - floors: List<FloorPlan>
+    + init(configUrl: String): Promise<void>
+    + switchScene(sceneId: String, targetYaw: Float): void
+    + getCurrentScene(): Scene
+}
+
+class Scene {
+    - id: String
+    - title: String
+    - floorId: String
+    - yaw: Float
+    - pitch: Float
+    - hfov: Float
+    - panoramaType: String
+    - panoramaSource: String
+    - floorPosition: Point2D
+    - hotSpots: List<HotSpot>
+    + getHotSpots(): List<HotSpot>
+}
+
+class Point2D {
+    + x: Float
+    + y: Float
+}
+
+abstract class HotSpot {
+    - id: String
+    - pitch: Float
+    - yaw: Float
+    - type: String
+    - text: String
+}
+
+class TransitionHotSpot {
+    - targetSceneId: String
+    - targetYaw: Float
+    - targetPitch: Float
+    + getTargetSceneId(): String
+}
+
+class InfoHotSpot {
+    - title: String
+    - body: String
+    - imageUrl: String
+    + getDetails(): Map
+}
+
+class FloorPlan {
+    - id: String
+    - name: String
+    - level: Integer
+    - imagePath: String
+    - bounds: Object
+    + getBounds(): Object
+}
+
+' Отношения между классами
+Tour "1" *-- "1..*" Scene : содержит
+Tour "1" *-- "1..*" FloorPlan : содержит
+Scene "1" *-- "0..*" HotSpot : привязаны
+Scene "1" o-- "1" Point2D : координаты на плане
+Scene --> "1" FloorPlan : относится к
+
+HotSpot <|-- TransitionHotSpot : наследует
+HotSpot <|-- InfoHotSpot : наследует
+
+@enduml

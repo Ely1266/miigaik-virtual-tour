@@ -1,0 +1,61 @@
+@startuml components
+skinparam componentStyle uml2
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam defaultFontSize 12
+
+skinparam package {
+    BackgroundColor #FAFCFF
+    BorderColor #2D68C4
+}
+
+skinparam component {
+    BackgroundColor #FFFFFF
+    BorderColor #1A5FB4
+}
+
+skinparam node {
+    BackgroundColor #F0F4F8
+    BorderColor #333333
+}
+
+node "Клиентское устройство (Браузер пользователя)" {
+    package "Веб-приложение «Виртуальная экскурсия»" {
+        [AppController] as AppCtrl
+        [DataManager] as DataMgr
+        [PannellumViewer] as Viewer
+        [LeafletMiniMap] as MapModule
+        [NavigationMenu] as NavMenu
+        [InfoPanel] as InfoModal
+    }
+}
+
+node "Внешний хостинг (GitHub Pages)" as GHNode {
+    [Статические ресурсы (HTML, CSS, JS)] as StaticFiles
+    [Конфигурация тура (scenes.json)] as ScenesJson
+    [Мультиразрешённые тайлы панорам] as Tiles
+    [Планы этажей МИИГАиК (PNG)] as FloorImages
+}
+
+node "Сервисы картографии (OpenStreetMap / map.miigaik.ru)" as MapServer {
+    [Картографические подложки и тайлы] as OSMTiles
+}
+
+' Связи контроллера с клиентскими модулями
+AppCtrl --> DataMgr : Запрос сцен и этажей
+AppCtrl --> Viewer : Инициализация и сброс вида
+AppCtrl --> MapModule : Обновление маркера и этажа
+AppCtrl --> NavMenu : Список локаций
+AppCtrl --> InfoModal : Открытие карточки объекта
+
+' Взаимодействие компонентов при событиях
+Viewer --> AppCtrl : Событие перехода по hotspot
+MapModule --> AppCtrl : Клик по маркеру на схеме
+NavMenu --> AppCtrl : Выбор сцены из списка
+
+' Сетевые интерфейсы к внешним источникам
+DataMgr ..> ScenesJson : HTTPS GET (JSON)
+Viewer ..> Tiles : HTTPS GET (JPG тайлы)
+MapModule ..> OSMTiles : HTTPS GET (тайлы OSM / map.miigaik.ru)
+MapModule ..> FloorImages : HTTPS GET (планы этажей)
+
+@enduml

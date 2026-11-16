@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "TourConfiguration",
+  "description": "Схема конфигурации виртуальной экскурсии МИИГАиК",
+  "type": "object",
+  "required": ["defaultScene", "scenes", "floors"],
+  "properties": {
+    "defaultScene": {
+      "type": "string",
+      "description": "ID стартовой сцены при загрузке"
+    },
+    "floors": {
+      "type": "array",
+      "description": "Список этажей для переключения планов",
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "level", "planImage"],
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "level": { "type": "integer" },
+          "planImage": { "type": "string" }
+        }
+      }
+    },
+    "scenes": {
+      "type": "object",
+      "description": "Словарь сцен, ключ — идентификатор сцены",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["title", "floorId", "yaw", "pitch", "hfov", "type"],
+        "properties": {
+          "title": { "type": "string", "description": "Понятное название помещения" },
+          "floorId": { "type": "string", "description": "Привязка к этажу" },
+          "yaw": { "type": "number", "description": "Начальный угол поворота (азимут)" },
+          "pitch": { "type": "number", "description": "Начальный наклон вверх/вниз" },
+          "hfov": { "type": "number", "description": "Начальный угол обзора (зум)" },
+          "type": { "type": "string", "enum": ["multires", "equirectangular"] },
+          "panorama": { "type": "string", "description": "Путь к одиночному файлу равнопромежуточной панорамы" },
+          "multiRes": {
+            "type": "object",
+            "description": "Конфигурация тайлов Pannellum мультиразрешения"
+          },
+          "floorPosition": {
+            "type": "object",
+            "required": ["x", "y"],
+            "properties": {
+              "x": { "type": "number", "description": "Координата X точки на плане (0..100%)" },
+              "y": { "type": "number", "description": "Координата Y точки на плане (0..100%)" }
+            }
+          },
+          "hotSpots": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["pitch", "yaw", "type"],
+              "properties": {
+                "pitch": { "type": "number" },
+                "yaw": { "type": "number" },
+                "type": { "type": "string", "enum": ["scene", "info"] },
+                "text": { "type": "string", "description": "Текст подсказки / название перехода" },
+                "sceneId": { "type": "string", "description": "ID целевой сцены (для type=scene)" },
+                "targetYaw": { "type": "number", "description": "Угол взгляда после перехода" },
+                "targetPitch": { "type": "number" },
+                "infoTitle": { "type": "string", "description": "Заголовок инфо-метки (для type=info)" },
+                "infoBody": { "type": "string", "description": "Описание инфо-метки" },
+                "infoImage": { "type": "string", "description": "Фото для инфо-метки" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

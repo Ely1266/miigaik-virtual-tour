@@ -1,0 +1,100 @@
+{
+  "defaultScene": "gk_1_entry",
+  "floors": [
+    {
+      "id": "floor_1",
+      "name": "1 этаж",
+      "level": 1,
+      "planImage": "floorplans/floor_1.png"
+    },
+    {
+      "id": "floor_2",
+      "name": "2 этаж",
+      "level": 2,
+      "planImage": "floorplans/floor_2.png"
+    }
+  ],
+  "scenes": {
+    "gk_1_entry": {
+      "title": "Главный вход (Проходная)",
+      "floorId": "floor_1",
+      "yaw": 0,
+      "pitch": 0,
+      "hfov": 100,
+      "type": "equirectangular",
+      "panorama": "panoramas/gk_1_entry.jpg",
+      "floorPosition": { "x": 50.0, "y": 85.0 },
+      "hotSpots": [
+        {
+          "pitch": -2,
+          "yaw": 5,
+          "type": "scene",
+          "text": "Пройти в Центральный холл",
+          "sceneId": "gk_1_hall",
+          "targetYaw": 0,
+          "targetPitch": 0
+        }
+      ]
+    },
+    "gk_1_hall": {
+      "title": "Центральный холл (1 этаж)",
+      "floorId": "floor_1",
+      "yaw": 0,
+      "pitch": 0,
+      "hfov": 100,
+      "type": "equirectangular",
+      "panorama": "panoramas/gk_1_hall.jpg",
+      "floorPosition": { "x": 50.0, "y": 60.0 },
+      "hotSpots": [
+        {
+          "pitch": -5,
+          "yaw": 180,
+          "type": "scene",
+          "text": "Выход на улицу",
+          "sceneId": "gk_1_entry",
+          "targetYaw": 180,
+          "targetPitch": 0
+        },
+        {
+          "pitch": 15,
+          "yaw": -30,
+          "type": "scene",
+          "text": "Подняться по лестнице в Розовый зал (2 этаж)",
+          "sceneId": "gk_2_pink_hall",
+          "targetYaw": 0,
+          "targetPitch": 0
+        },
+        {
+          "pitch": 2,
+          "yaw": 45,
+          "type": "info",
+          "text": "Информационный стенд МИИГАиК",
+          "infoTitle": "Главный корпус МИИГАиК",
+          "infoBody": "Историческое здание университета. Здесь расположены деканаты, библиотека и аудитории геодезического факультета.",
+          "infoImage": "assets/info/stand_entry.jpg"
+        }
+      ]
+    },
+    "gk_2_pink_hall": {
+      "title": "Розовый зал (2 этаж)",
+      "floorId": "floor_2",
+      "yaw": 0,
+      "pitch": 0,
+      "hfov": 100,
+      "type": "equirectangular",
+      "panorama": "panoramas/gk_2_pink_hall.jpg",
+      "floorPosition": { "x": 50.0, "y": 40.0 },
+      "hotSpots": [
+        {
+          "pitch": -12,
+          "yaw": 175,
+          "type": "scene",
+          "text": "Спуститься в Центральный холл 1 этажа",
+          "sceneId": "gk_1_hall",
+          "targetYaw": 180,
+          "targetPitch": 0
+        }
+      ]
+    }
+  }
+}

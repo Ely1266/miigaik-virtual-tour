@@ -1,0 +1,38 @@
+@startuml sequence_hotspot
+autonumber
+skinparam defaultFontName "Segoe UI", Arial, sans-serif
+skinparam defaultFontSize 12
+
+actor "Пользователь" as User
+participant "PannellumViewer" as Viewer
+participant "AppController" as Ctrl
+participant "DataManager" as Data
+participant "LeafletMiniMap" as Map
+participant "UI Header" as UI
+
+User -> Viewer : Клик на стрелку перехода (HotSpot)
+Viewer -> Ctrl : onHotSpotClick(targetSceneId, targetYaw)
+activate Ctrl
+
+Ctrl -> Data : getScene(targetSceneId)
+Data --> Ctrl : Объект сцены Scene
+
+Ctrl -> Viewer : loadScene(targetSceneId, targetYaw)
+activate Viewer
+Viewer -> Viewer : Загрузка и отрисовка тайлов панорамы
+Viewer --> Ctrl : Сцена готова
+deactivate Viewer
+
+Ctrl -> UI : updateTitle(scene.title)
+Ctrl -> Map : updatePosition(scene.floorId, scene.floorPosition)
+activate Map
+alt Этаж изменился
+    Map -> Map : Переключить подложку этажа (FloorPlan)
+end
+Map -> Map : Переместить маркер на новые координаты (x, y)
+deactivate Map
+
+Ctrl --> User : Отображение нового помещения по ходу движения
+deactivate Ctrl
+
+@enduml
