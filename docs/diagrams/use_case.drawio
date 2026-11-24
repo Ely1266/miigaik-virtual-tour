@@ -1,0 +1,84 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net">
+  <diagram id="miigaik-use-cases" name="Варианты использования">
+    <mxGraphModel dx="1100" dy="795" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="795" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="system" value="Веб-приложение «Виртуальная экскурсия по МИИГАиК»" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;align=left;spacingLeft=18;spacingTop=8;fontSize=17;fontStyle=1;fillColor=#ffffff;strokeColor=#263b53;strokeWidth=2;container=0;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="180" y="35" width="740" height="727" />
+        </mxCell>
+        <mxCell id="section1" value="Просмотр панорам — реализовано" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;fontColor=#263b53;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="330" y="65" width="440" height="22" />
+        </mxCell>
+        <mxCell id="section2" value="Ориентация и поиск — запланировано" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=15;fontStyle=1;fontColor=#263b53;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="330" y="449" width="440" height="22" />
+        </mxCell>
+        <mxCell id="rule" value="" style="shape=line;strokeColor=#c6d1dc;strokeWidth=1;html=1;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="200" y="435" width="700" height="1" />
+        </mxCell>
+        <mxCell id="visitor" value="Посетитель&lt;br&gt;(абитуриент / гость)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=14;strokeWidth=2;strokeColor=#263b53;fillColor=#ffffff;fontColor=#263b53;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="55" y="240" width="60" height="98" />
+        </mxCell>
+        <mxCell id="freshman" value="Первокурсник" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=14;strokeWidth=2;strokeColor=#263b53;fillColor=#ffffff;fontColor=#263b53;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="980" y="553" width="60" height="98" />
+        </mxCell>
+        <mxCell id="uc1" value="UC-1: Осмотреть панораму 360°" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;fillColor=#f1f6fc;strokeColor=#295e9d;fontColor=#263b53;strokeWidth=1.7;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="330" y="91" width="440" height="68" />
+        </mxCell>
+        <mxCell id="uc2" value="UC-2: Перейти в соседнюю локацию" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;fillColor=#f1f6fc;strokeColor=#295e9d;fontColor=#263b53;strokeWidth=1.7;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="330" y="179" width="440" height="68" />
+        </mxCell>
+        <mxCell id="uc4" value="UC-4: Получить информацию об объекте" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;fillColor=#f1f6fc;strokeColor=#295e9d;fontColor=#263b53;strokeWidth=1.7;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="330" y="267" width="440" height="68" />
+        </mxCell>
+        <mxCell id="uc8" value="UC-8: Выбрать локацию из меню" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;fillColor=#f1f6fc;strokeColor=#295e9d;fontColor=#263b53;strokeWidth=1.7;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="330" y="355" width="440" height="68" />
+        </mxCell>
+        <mxCell id="uc5" value="UC-5: Изучить план этажа" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;fillColor=#fff5de;strokeColor=#876728;fontColor=#263b53;strokeWidth=1.7;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="330" y="475" width="440" height="68" />
+        </mxCell>
+        <mxCell id="uc6" value="UC-6: Посмотреть план другого этажа" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;fillColor=#fff5de;strokeColor=#876728;fontColor=#263b53;strokeWidth=1.7;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="330" y="575" width="440" height="68" />
+        </mxCell>
+        <mxCell id="uc7" value="UC-7: Найти аудиторию или кафедру" style="ellipse;whiteSpace=wrap;html=1;fontSize=16;fillColor=#fff5de;strokeColor=#876728;fontColor=#263b53;strokeWidth=1.7;" vertex="1" parent="1">
+          <mxGeometry as="geometry" x="330" y="675" width="440" height="68" />
+        </mxCell>
+        <mxCell id="v_uc1" value="" style="html=1;rounded=0;strokeWidth=1.6;strokeColor=#263b53;fontSize=14;fontColor=#263b53;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;endArrow=none;startArrow=none;" edge="1" parent="1" source="visitor" target="uc1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="v_uc2" value="" style="html=1;rounded=0;strokeWidth=1.6;strokeColor=#263b53;fontSize=14;fontColor=#263b53;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;endArrow=none;startArrow=none;" edge="1" parent="1" source="visitor" target="uc2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="v_uc4" value="" style="html=1;rounded=0;strokeWidth=1.6;strokeColor=#263b53;fontSize=14;fontColor=#263b53;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;endArrow=none;startArrow=none;" edge="1" parent="1" source="visitor" target="uc4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="v_uc8" value="" style="html=1;rounded=0;strokeWidth=1.6;strokeColor=#263b53;fontSize=14;fontColor=#263b53;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;endArrow=none;startArrow=none;" edge="1" parent="1" source="visitor" target="uc8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="v_uc5" value="" style="html=1;rounded=0;strokeWidth=1.6;strokeColor=#263b53;fontSize=14;fontColor=#263b53;exitX=1;exitY=0.5;entryX=0;entryY=0.5;exitPerimeter=0;entryPerimeter=0;endArrow=none;startArrow=none;" edge="1" parent="1" source="visitor" target="uc5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f_uc6" value="" style="html=1;rounded=0;strokeWidth=1.6;strokeColor=#263b53;fontSize=14;fontColor=#263b53;exitX=0;exitY=0.5;entryX=1;entryY=0.5;exitPerimeter=0;entryPerimeter=0;endArrow=none;startArrow=none;" edge="1" parent="1" source="freshman" target="uc6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f_uc7" value="" style="html=1;rounded=0;strokeWidth=1.6;strokeColor=#263b53;fontSize=14;fontColor=#263b53;exitX=0;exitY=0.5;entryX=1;entryY=0.5;exitPerimeter=0;entryPerimeter=0;endArrow=none;startArrow=none;" edge="1" parent="1" source="freshman" target="uc7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="inherit" value="" style="html=1;rounded=0;strokeWidth=1.6;strokeColor=#263b53;fontSize=14;fontColor=#263b53;exitX=0.5;exitY=0;entryX=0.5;entryY=0;exitPerimeter=0;entryPerimeter=0;endArrow=block;endFill=0;endSize=13;startArrow=none;" edge="1" parent="1" source="freshman" target="visitor">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1010" y="15" />
+              <mxPoint x="85" y="15" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="extend_floor" value="«extend»" style="html=1;rounded=0;strokeWidth=1.6;strokeColor=#263b53;fontSize=14;fontColor=#263b53;exitX=0.5;exitY=0;entryX=0.5;entryY=1;exitPerimeter=0;entryPerimeter=0;dashed=1;dashPattern=5 4;endArrow=open;endFill=0;endSize=10;labelBackgroundColor=#ffffff;" edge="1" parent="1" source="uc6" target="uc5">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint as="offset" x="47" y="0" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
